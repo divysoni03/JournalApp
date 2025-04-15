@@ -1,0 +1,30 @@
+# NOW we can choose a profile to run our application server, whether we are dev or the server is running on production
+#   -> if we are dev then we can't use the original database to test or anything which contains real users
+#   -> if this is production then it contains database and other configuration for production which contains real user data
+
+spring:
+  profile:
+    active: dev
+# we can store our important secretes in here, and don't commit our yml file
+quotes:
+  api: https://dummyjson.com/quotes/random
+
+# we can also define profiles which can include many active profiles.
+#spring:
+#  profiles:
+#    active: dev,prod
+
+# now if we don't have application.yml and only have application-dev.yml & application-prod.yml
+#   -> if we want to run our application on a server then we run it through terminal and run our jar file
+#   -> java -jar jar_location -D application.properties
+#   -> here -D means we are giving external application properties afterward
+#   -> here in this case if we want to define that we are using application-dev.yml then we write
+#   -> if we are running with maven i.e.,  maven clean packege -D spring.profile.active=dev
+#   -> if we are running without maven i.e.,   java -jar jar_location --spring.profile.active=dev
+
+
+
+# what we did on application.yml we can also set profiles to the beans
+# we can define that which beans should be loaded and vice versa
+#   just by one annotation @Profile("profile_name") -< i.e., @Profile("dev")
+#   this bean will be loaded only when profile is dev

@@ -1,0 +1,33 @@
+<configuration>
+    <!-- main two things goes here appender and logger -->
+    <!-- appender : defines that where the logs go, i.e. console appender - logs goes to console and file appender - goes to file -->
+    <!-- logger : -->
+
+    <!-- Console Appender -->
+    <appender name="myConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <!--encoder is the formate specifier which says which formate the logs will be printed-->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--File Appender -->
+    <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
+        <!-- specifying the file -->
+        <file>
+            JournalApp.log
+        </file>
+
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Now we made the appender, now we will use this using root node which is the root of the application -->
+    <root level="INFO">
+        <!-- specifying which appender we are using, here we will use both console & file -->
+        <appender-ref ref="myConsoleAppender"/>
+        <appender-ref ref="fileAppender"/>
+    </root>
+
+</configuration>
