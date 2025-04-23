@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<User> editJournal(@RequestBody User user) {
+    public ResponseEntity<User> editUser(@RequestBody User newUser) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String userName = authentication.getName();
@@ -37,16 +37,16 @@ public class UserController {
             User oldUser = userService.findByUserName(userName);
             if(oldUser != null) {
                 // Update username if provided
-                if(user.getUserName() != null && !user.getUserName().isEmpty()) {
-                    oldUser.setUserName(user.getUserName());
+                if(newUser.getUserName() != null && !newUser.getUserName().isEmpty()) {
+                    oldUser.setUserName(newUser.getUserName());
                 }
                 
                 // Update password if provided
-                if(user.getPassword() != null && !user.getPassword().isEmpty()) {
-                    oldUser.setPassword(user.getPassword()); // Password will be encrypted in UserService.saveUser()
+                if(newUser.getPassword() != null && !newUser.getPassword().isEmpty()) {
+                    oldUser.setPassword(newUser.getPassword()); // Password will be encrypted in UserService.saveUser()
                 }
 
-                userService.saveNewUser(oldUser); // This will encrypt the password
+                userService.saveNewUser(oldUser); // This will encrypt the password because the new user's pass is not encrypted yet
                 return new ResponseEntity<>(oldUser, HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
