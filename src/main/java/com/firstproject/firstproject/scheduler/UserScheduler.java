@@ -4,7 +4,9 @@ import com.firstproject.firstproject.entity.Journal;
 import com.firstproject.firstproject.entity.User;
 import com.firstproject.firstproject.repo.UserRepoImpl;
 import com.firstproject.firstproject.service.EmailService;
+import com.firstproject.firstproject.service.SentimentAnalysis;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -20,6 +22,10 @@ public class UserScheduler {
     @Autowired
     private UserRepoImpl userRepo;
 
+    @Autowired
+    private SentimentAnalysis sentimentAnalysis;
+
+    @Scheduled(cron = "0 0 9 * * SUN")
     public void fetchUserAndSendMail() {
         List<User> users = userRepo.getUsersForSA(); // fetching users who have emails added and agreed to receive an email
 
@@ -37,7 +43,10 @@ public class UserScheduler {
             //-> making one single string from all the content
             String joinedContent = String.join(" ", contentOfJournals);
 
-            emailService.sendMail(/*user.getEmail()*/ "bob12@gmail.com", "Your last 7 Days Journal", "You are adding so many journals we are so happy, \n" + joinedContent);
+            // getting the sentiment by analysing the content of the user
+            String sentiment = sentimentAnalysis.getSentiment(joinedContent);
+
+            emailService.sendMail(/*user.getEmail()*/ "bob12@gmail.com", "Your last 7 Days Journal sentiment", "You are adding so many journals we are so happy, \n" + sentiment /* or joined content <- which is users journals*/);
         }
     }
 }

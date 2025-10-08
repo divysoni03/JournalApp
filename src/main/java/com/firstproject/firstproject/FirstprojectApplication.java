@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
@@ -16,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 */
 @SpringBootApplication
 @EnableTransactionManagement // searches for transaction operations
+@EnableScheduling // to enable scheduling, so the userScheduler file runs on its on w.r.t cron expression
 public class FirstprojectApplication {
 
     public static void main(String[] args) {
@@ -28,10 +30,14 @@ public class FirstprojectApplication {
     * so we are using platformTransactionManager but that is actually using MongoTransactionManager behind the scene*/
     @Bean
     public PlatformTransactionManager transactionManager(MongoDatabaseFactory dbFactory) {
-        return new MongoTransactionManager(dbFactory); // so we are returning an instance/bean/objectInstance so we can use that to implement transaction features in any function or class
-    } // where MongoDatabaseFactory helps to connect to database
+        return new MongoTransactionManager(dbFactory);
+    }
+    /* so we are returning an instance/bean/objectInstance so we can use that to implement transaction features
+       in any function or class where MongoDatabaseFactory helps to connect to database
+    */
 
 
+    // making a IOC bean of restTemplate , returning an instance of restTemplate
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();

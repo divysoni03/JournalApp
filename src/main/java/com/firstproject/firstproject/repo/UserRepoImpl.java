@@ -14,8 +14,11 @@ public class UserRepoImpl {
 
     public List<User> getUsersForSA() {
         Query query = new Query();
-        query.addCriteria(Criteria.where("name").is("divy303"));
+//      query.addCriteria(Criteria.where("name").is("divy303"));
+        query.addCriteria(Criteria.where("email").regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9._%+-]+\\.[A-Z|a-z]{2,6}$"));
+        query.addCriteria(Criteria.where("sentimentAnalysis").is(true));
         List<User> users = mongoTemplate.find(query, User.class);
+
 
         return users;
     }

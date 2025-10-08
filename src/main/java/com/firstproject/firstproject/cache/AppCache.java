@@ -19,9 +19,11 @@ public class AppCache {
     public Map<String, String> APP_CACHE;
 
 
-    /*HERE-> post construct is an annotation which is used on any method, now when the class bean gets initialized then ,
+    /*HERE-> post construct is an annotation which is used on any method, now when the class bean gets initialized again then ,
     * this annotated method will be called automatically
-    * it is commonly used to configure data from db one time only.*/
+    * it is commonly used to configure data from db one time only.
+    *
+    * -> simply when the spring application restarts then this method is called automatically with help of postConstruct*/
     @PostConstruct
     public void init() {
         APP_CACHE = new HashMap<>();
