@@ -5,6 +5,20 @@
 spring:
   profile:
     active: dev
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: divysoni303@gmail.com
+    password: mzhy fkmy vzoi slzg
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+
+          starttls:
+            enable: true
 # we can store our important secretes in here, and don't commit our yml file
 quotes:
   api: https://dummyjson.com/quotes/random

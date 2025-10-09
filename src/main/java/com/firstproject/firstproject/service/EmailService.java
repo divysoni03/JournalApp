@@ -7,12 +7,12 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-@Slf4j // used to log
+//@Slf4j // used to log
 public class EmailService {
 
     // accessing javaMailSender bean
     @Autowired
-    private JavaMailSender javaMailSender;
+    private JavaMailSender MailSender;
 
     public void sendMail(String to, String subject, String body) {
         try{
@@ -21,9 +21,11 @@ public class EmailService {
             mail.setSubject(subject);
             mail.setText(body);
 
-            javaMailSender.send(mail);
+            mail.setFrom("divysoni303@gmail.com");
+            MailSender.send(mail);
         } catch(Exception e) {
-            log.error("Error Sending mail : ", e);
+//          log.error("Error Sending mail : ", e);
+            e.printStackTrace();
         }
 
     }

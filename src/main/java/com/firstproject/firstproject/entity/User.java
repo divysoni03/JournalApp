@@ -25,9 +25,11 @@ public class User {
     @NonNull // not null by lombok annotation, when we will set the value of these then the annotation will check if it's null or not
     private String password;
 
+    private String email;
+    private boolean sentimentAnalysis;
+
     // we are referring different table entity in different table, works like foreign key in here
     @DBRef
     private List<Journal> journalEntries = new ArrayList<>();
-
     private List<String> Roles;
 }

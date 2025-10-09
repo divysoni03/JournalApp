@@ -1,5 +1,6 @@
 package com.firstproject.firstproject.entity;
 
+import com.firstproject.firstproject.enums.Sentiment;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
             They allow users to work with Java objects instead of writing complex SQL queries.
             Spring Data JPA translates these operations into database commands.
 * */
+
 // just like entity in mysql project here in mongodb every row is defined as document so we will use annotation @Document
 @Document(collection = "journal_entries") // if we don't specify the NAME of the collection then it will find the collection named as the name of the class we defined below in our case = 'Journal'
 @Getter
@@ -38,4 +40,5 @@ public class Journal {
     private String title;
     private String content;
     private LocalDateTime date;
+    private Sentiment sentiment;
 }
