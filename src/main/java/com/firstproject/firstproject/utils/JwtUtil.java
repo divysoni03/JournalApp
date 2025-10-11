@@ -61,9 +61,10 @@ public class JwtUtil {
     }
 
 
-    public Boolean validateToken(String token, String username) {
-        final String extractionUsername = extractUsername(token);
-        return (extractionUsername.equals(username) && !isTokenExpired(token));
+    /* here we have already checked the token with signing key so we don't have to compare it again with username,
+    * so just check the expiration time */
+    public Boolean validateToken(String token) {
+        return !isTokenExpired(token);
     }
 
     private Boolean isTokenExpired(String token) {
