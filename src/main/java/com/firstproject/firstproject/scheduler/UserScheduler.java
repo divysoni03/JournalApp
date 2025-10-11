@@ -25,10 +25,11 @@ public class UserScheduler {
     @Autowired
     private UserRepoImpl userRepo;
 
-    @Autowired
-    private SentimentAnalysis sentimentAnalysis;
+    // No use-without any model
+//    @Autowired
+//    private SentimentAnalysis sentimentAnalysis;
 
-    @Scheduled(cron = "0 0 9 * * SUN")
+    @Scheduled(cron = "0 */2 * * * *")
     public void fetchUserAndSendMail() {
         List<User> users = userRepo.getUsersForSA();
         for(User user: users) {

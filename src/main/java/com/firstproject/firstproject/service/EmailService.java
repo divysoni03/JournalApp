@@ -21,8 +21,8 @@ public class EmailService {
             mail.setSubject(subject);
             mail.setText(body);
 
-            mail.setFrom("divysoni303@gmail.com");
             MailSender.send(mail);
+            System.out.println("mail sent successfully to " + to);
         } catch(Exception e) {
 //          log.error("Error Sending mail : ", e);
             e.printStackTrace();
