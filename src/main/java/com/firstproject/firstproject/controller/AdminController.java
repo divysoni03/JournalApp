@@ -33,7 +33,8 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/create-admin-user")
+    /* only one admin can create another admin, first admin will be created manually */
+    @PostMapping("/create-admin")
     public ResponseEntity<User> createAdminUser(@RequestBody User user) {
         try {
             userService.saveAdminUser(user);

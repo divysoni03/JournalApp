@@ -17,16 +17,17 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/getUsers")
-    public ResponseEntity< List<User> > findAll() {
-        try {
-            List<User> users = userService.getUsers();
-            return new ResponseEntity<>(users, HttpStatus.OK);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+     /* works but, now only admin can access all users */
+//    @GetMapping("/getUsers")
+//    public ResponseEntity< List<User> > findAll() {
+//        try {
+//            List<User> users = userService.getUsers();
+//            return new ResponseEntity<>(users, HttpStatus.OK);
+//        }
+//        catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     @PutMapping("/edit")
     public ResponseEntity<User> editUser(@RequestBody User newUser) {

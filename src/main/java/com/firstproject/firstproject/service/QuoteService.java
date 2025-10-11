@@ -27,7 +27,7 @@ public class QuoteService {
     @Autowired
     private RedisService redisService;
 
-    public String getQuote() {
+    public String getQuotes() {
         // getting the api from the app cache
         String api = appCache.APP_CACHE.get("quotes_api");
 
@@ -43,7 +43,7 @@ public class QuoteService {
             if(response != null) {
                 redisService.set("quote", body, 300l); /* 300 sec lifetime of this key value pair */
             }
-            return body.getQuote();
+            return body.getQuote() + ", Author: " + body.getAuthor();
         }
     }
 }

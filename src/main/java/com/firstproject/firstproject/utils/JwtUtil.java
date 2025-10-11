@@ -1,10 +1,8 @@
 package com.firstproject.firstproject.utils;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.crypto.SecretKey;
@@ -28,7 +26,7 @@ public class JwtUtil {
                 .header().empty().add("typ", "JWT")
                 .and()
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5 )) /* adding milSec * sec * number of min <- here 5 mins*/
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 )) /* adding milSec * sec * number of min <- here 5 mins*/
                 .signWith(getSigningKey()) /* here in default we are using HMACSHA256 encoding algorithm, where it encodes the content with signingKey/secret key which we provided*/
                 .compact();
     }

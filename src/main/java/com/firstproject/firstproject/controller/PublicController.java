@@ -65,7 +65,6 @@ public class PublicController {
 
     @GetMapping("/greet")
     public ResponseEntity<?> greetings() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return new ResponseEntity<>("Hi " + auth.getName() + ", Quote of the day :" +quoteService.getQuote(), HttpStatus.OK);
+        return new ResponseEntity<>("Hi " + "Quote of the day :" +quoteService.getQuotes(), HttpStatus.OK);
     }
 }
