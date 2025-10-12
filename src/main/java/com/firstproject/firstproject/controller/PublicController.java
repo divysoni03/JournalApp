@@ -5,6 +5,7 @@ import com.firstproject.firstproject.service.QuoteService;
 import com.firstproject.firstproject.service.UserDetailsServiceImpl;
 import com.firstproject.firstproject.service.UserService;
 import com.firstproject.firstproject.utils.JwtUtil;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/public")
+@Tag(name = "public APIs")
 public class PublicController {
     @Autowired
     UserService userService;

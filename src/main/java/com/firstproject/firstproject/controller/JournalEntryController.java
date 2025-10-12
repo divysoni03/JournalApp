@@ -5,6 +5,7 @@ import com.firstproject.firstproject.entity.Journal;
 import com.firstproject.firstproject.entity.User;
 import com.firstproject.firstproject.service.JournalEntryService;
 import com.firstproject.firstproject.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/journal")
+@Tag(name = "JournalEntry APIs")
 public class JournalEntryController {
     @Autowired
     private JournalEntryService journalEntryService; // when we define this the spring gives us an instance of this object that IOC created
@@ -54,7 +56,8 @@ public class JournalEntryController {
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<Journal> getJournalById(@PathVariable ObjectId id) {
+    public ResponseEntity<Journal> getJournalById(@PathVariable String myId) {
+        ObjectId id = new ObjectId(myId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userName = auth.getName();
         User user = userService.findByUserName(userName);

@@ -34,71 +34,70 @@ public class UserScheduler {
     @Autowired
     private KafkaTemplate<String, SentimentData> kafkaTemplate;
 
-    @Scheduled(cron = "0 */2 * * * *")
+    @Scheduled(cron = "0 0 9 ? * SUN")
     public void fetchUserAndSendMail() {
 
-        List<User> users = userRepo.getUsersForSA();
-        for (User user : users) {
-            List<Journal> journalEntries = user.getJournalEntries();
-            List<Sentiment> sentiments = journalEntries.stream().filter(x -> x.getDate().isAfter(LocalDateTime.now().minus(7, ChronoUnit.DAYS))).map(x -> x.getSentiment()).collect(Collectors.toList());
-            Map<Sentiment, Integer> sentimentCounts = new HashMap<>();
-            for (Sentiment sentiment : sentiments) {
-                if (sentiment != null)
-                    sentimentCounts.put(sentiment, sentimentCounts.getOrDefault(sentiment, 0) + 1);
-            }
-            Sentiment mostFrequentSentiment = null;
-            int maxCount = 0;
-            for (Map.Entry<Sentiment, Integer> entry : sentimentCounts.entrySet()) {
-                if (entry.getValue() > maxCount) {
-                    maxCount = entry.getValue();
-                    mostFrequentSentiment = entry.getKey();
-                }
-            }
-            if (mostFrequentSentiment != null) {
-                SentimentData sentimentData = SentimentData.builder().email(user.getEmail()).sentiment("Sentiment for last 7 days " + mostFrequentSentiment).build();
-                try{
-                    kafkaTemplate.send("weekly-sentiments", sentimentData.getEmail(), sentimentData);
-                }catch (Exception e){
-                    emailService.sendMail(sentimentData.getEmail(), "Sentiment for previous week", sentimentData.getSentiment());
-                }
-            }
-            /* with not fallback protection if kafka doesn't work all will be fail
-            * if (mostFrequentSentiment != null) {
-                SentimentData sentimentData = SentimentData.builder().email(user.getEmail()).sentiment("Sentiment for last 7 days " + mostFrequentSentiment).build();
-                kafkaTemplate.send("weekly-sentiments", sentimentData.getEmail(), sentimentData);
-            }*/
-        }
-
-        // simple but with no kafka
+        // with proper kafka with fallback protection
 //        List<User> users = userRepo.getUsersForSA();
-//        for(User user: users) {
+//        for (User user : users) {
 //            List<Journal> journalEntries = user.getJournalEntries();
-//
-//            // filtering sentiments of the user of last 7 days, and then retrieving all the sentiments and putting them into this list
-//            List<Sentiment> sentiments = journalEntries.stream().filter(x -> x.getDate().isAfter(LocalDateTime.now().minus(7, ChronoUnit.DAYS))).map(x->x.getSentiment()).collect(Collectors.toList());
-//
-//            // counting every sentiment of the user
-//            Map<Sentiment, Integer> sentimentCount = new HashMap<>();
-//            for(Sentiment sentiment: sentiments) {
-//                if(sentiment != null)
-//                    sentimentCount.put(sentiment, sentimentCount.getOrDefault(sentiment, 0) + 1);
+//            List<Sentiment> sentiments = journalEntries.stream().filter(x -> x.getDate().isAfter(LocalDateTime.now().minus(7, ChronoUnit.DAYS))).map(x -> x.getSentiment()).collect(Collectors.toList());
+//            Map<Sentiment, Integer> sentimentCounts = new HashMap<>();
+//            for (Sentiment sentiment : sentiments) {
+//                if (sentiment != null)
+//                    sentimentCounts.put(sentiment, sentimentCounts.getOrDefault(sentiment, 0) + 1);
 //            }
-//
-//            // seeing which sentiment is max or frequent
 //            Sentiment mostFrequentSentiment = null;
 //            int maxCount = 0;
-//            for(Map.Entry<Sentiment, Integer> entry : sentimentCount.entrySet()) {
+//            for (Map.Entry<Sentiment, Integer> entry : sentimentCounts.entrySet()) {
 //                if (entry.getValue() > maxCount) {
 //                    maxCount = entry.getValue();
 //                    mostFrequentSentiment = entry.getKey();
 //                }
 //            }
-//            if(mostFrequentSentiment != null) {
-//                emailService.sendMail(user.getEmail(), "Sentiment of last 7 days", mostFrequentSentiment.toString());
+//            if (mostFrequentSentiment != null) {
+//                SentimentData sentimentData = SentimentData.builder().email(user.getEmail()).sentiment("Sentiment for last 7 days " + mostFrequentSentiment).build();
+//                try{
+//                    kafkaTemplate.send("weekly-sentiments", sentimentData.getEmail(), sentimentData);
+//                }catch (Exception e){
+//                    emailService.sendMail(sentimentData.getEmail(), "Sentiment for previous week", sentimentData.getSentiment());
+//                }
 //            }
+            /* with not fallback protection if kafka doesn't work all will be fail
+            * if (mostFrequentSentiment != null) {
+                SentimentData sentimentData = SentimentData.builder().email(user.getEmail()).sentiment("Sentiment for last 7 days " + mostFrequentSentiment).build();
+                kafkaTemplate.send("weekly-sentiments", sentimentData.getEmail(), sentimentData);
+            }*/
 //        }
 
+        // simple but with no kafka
+        List<User> users = userRepo.getUsersForSA();
+        for(User user: users) {
+            List<Journal> journalEntries = user.getJournalEntries();
 
+            // filtering sentiments of the user of last 7 days, and then retrieving all the sentiments and putting them into this list
+            List<Sentiment> sentiments = journalEntries.stream().filter(x -> x.getDate().isAfter(LocalDateTime.now().minus(7, ChronoUnit.DAYS))).map(x->x.getSentiment()).collect(Collectors.toList());
+
+            // counting every sentiment of the user
+            Map<Sentiment, Integer> sentimentCount = new HashMap<>();
+            for(Sentiment sentiment: sentiments) {
+                if(sentiment != null)
+                    sentimentCount.put(sentiment, sentimentCount.getOrDefault(sentiment, 0) + 1);
+            }
+
+            // seeing which sentiment is max or frequent
+            Sentiment mostFrequentSentiment = null;
+            int maxCount = 0;
+            for(Map.Entry<Sentiment, Integer> entry : sentimentCount.entrySet()) {
+                if (entry.getValue() > maxCount) {
+                    maxCount = entry.getValue();
+                    mostFrequentSentiment = entry.getKey();
+                }
+            }
+            if(mostFrequentSentiment != null) {
+                emailService.sendMail(user.getEmail(), "Sentiment of last 7 days", mostFrequentSentiment.toString());
+            }
+        }
 
 
         // first simple logic
@@ -123,5 +122,8 @@ public class UserScheduler {
 //
 //            emailService.sendMail(/*user.getEmail()*/ "bob12@gmail.com", "Your last 7 Days Journal sentiment", "You are adding so many journals we are so happy, \n" + sentiment /* or joined content <- which is users journals*/);
 //        }
+
+
+
     }
 }

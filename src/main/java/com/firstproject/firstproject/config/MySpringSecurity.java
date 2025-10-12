@@ -60,7 +60,7 @@ public class MySpringSecurity {
         http
             .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(request -> request
-                .requestMatchers("/public/**").permitAll()
+                .requestMatchers("/**").permitAll()
                 .requestMatchers("/journal/**").authenticated()
                 .requestMatchers("/user/**").authenticated()
                 .requestMatchers("/admin/**").hasRole("ADMIN")

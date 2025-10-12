@@ -1,5 +1,6 @@
 package com.firstproject.firstproject.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -21,6 +22,7 @@ public class User {
 
     @Indexed(unique = true) // making it unique
     @NonNull
+    @Schema(description = "unique name of the user")
     private String userName;
     @NonNull // not null by lombok annotation, when we will set the value of these then the annotation will check if it's null or not
     private String password;

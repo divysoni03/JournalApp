@@ -10,6 +10,12 @@ spring:
 quotes:
   api: https://dummyjson.com/quotes/random
 
+# for changing the path of the swagger documentation in the browser
+springdoc:
+  swagger-ui:
+    path: /docs
+
+
 # we can also define profiles which can include many active profiles.
 #spring:
 #  profiles:
