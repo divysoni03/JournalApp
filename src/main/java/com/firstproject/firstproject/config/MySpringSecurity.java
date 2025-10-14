@@ -60,11 +60,11 @@ public class MySpringSecurity {
         http
             .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(request -> request
-                .requestMatchers("/**").permitAll()
+                .requestMatchers("/public/**").permitAll()
                 .requestMatchers("/journal/**").authenticated()
                 .requestMatchers("/user/**").authenticated()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated());
+                .anyRequest().permitAll());
 //            .httpBasic(Customizer.withDefaults()); // basic auth remove after adding jwt
 
 
